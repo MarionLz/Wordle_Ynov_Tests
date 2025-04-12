@@ -2,46 +2,48 @@ package com.ynov.wordle;
 
 public class GameLogic {
 
-	private String guessedWord;
-	private String correctWord;
+	private String guess;
+	private String target;
 
-	public GameLogic(String guessedWord, String correctWord) {
-		this.guessedWord = guessedWord;
-		this.correctWord = correctWord;
+	public GameLogic(String guess, String target) {
+		this.guess = guess;
+		this.target = target;
 	}
 	
-	private int[] countOccurrencesLettersInCorrectWord() {
+	private int[] countNbLettersOccurrencesInCorrectWord() {
 		
 		int[] letterCount = new int[26];
 		
-		for (int i = 0; i < correctWord.length(); i++) {
-			letterCount[correctWord.charAt(i) - 'a']++; 
+		for (int i = 0; i < target.length(); i++) {
+			letterCount[target.charAt(i) - 'a']++; 
 		}
 		return letterCount;
 	}
 
-	public String checkGuessedWord() {
+	public String checkGuess() {
 		
 		StringBuilder result = new StringBuilder();
+		boolean isCorrect = true;
 		
-		int[] letterCount = countOccurrencesLettersInCorrectWord();
+		int[] letterCount = countNbLettersOccurrencesInCorrectWord();
 		
 		LetterState[] letterStates = new LetterState[5];
 		
         for (int i = 0; i < 5; i++) {
-            char guessedLetter = guessedWord.charAt(i);
-            if (guessedLetter == correctWord.charAt(i)) {
+            char guessLetter = guess.charAt(i);
+            if (guessLetter == target.charAt(i)) {
                 letterStates[i] = LetterState.GREEN;
-                letterCount[guessedLetter - 'a']--;
+                letterCount[guessLetter - 'a']--;
             } else {
                 letterStates[i] = LetterState.RESET;
+                isCorrect =  false;
             }
         }
 			
         for (int i = 0; i < 5; i++) {
-            char guessedLetter = guessedWord.charAt(i);
+            char guessedLetter = guess.charAt(i);
             
-            if (letterStates[i] != LetterState.GREEN && correctWord.contains(String.valueOf(guessedLetter)) && letterCount[guessedLetter - 'a'] > 0) {
+            if (letterStates[i] != LetterState.GREEN && target.contains(String.valueOf(guessedLetter)) && letterCount[guessedLetter - 'a'] > 0) {
                 letterStates[i] = LetterState.YELLOW;
                 letterCount[guessedLetter - 'a']--;
             }
@@ -53,6 +55,7 @@ public class GameLogic {
             result.append(letterStates[i].getAnsiCode()).append(guessedLetter).append(LetterState.RESET.getAnsiCode());
         }
         
+        System.out.print(result.toString());
 		return result.toString();
 	}
 }
