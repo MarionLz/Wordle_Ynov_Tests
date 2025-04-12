@@ -20,10 +20,10 @@ public class GameLogic {
 		return letterCount;
 	}
 
-	public String checkGuess() {
+	public String checkGuess(GameData data) {
 		
 		StringBuilder result = new StringBuilder();
-		boolean isCorrect = true;
+		data.setCorrectAttempt(true);
 		
 		int[] letterCount = countNbLettersOccurrencesInCorrectWord();
 		
@@ -36,7 +36,7 @@ public class GameLogic {
                 letterCount[guessLetter - 'a']--;
             } else {
                 letterStates[i] = LetterState.RESET;
-                isCorrect =  false;
+                data.setCorrectAttempt(false);
             }
         }
 			
@@ -55,7 +55,6 @@ public class GameLogic {
             result.append(letterStates[i].getAnsiCode()).append(guessedLetter).append(LetterState.RESET.getAnsiCode());
         }
         
-        System.out.print(result.toString());
 		return result.toString();
 	}
 }

@@ -1,12 +1,10 @@
 package com.ynov.wordle;
 
-import java.util.Scanner;
-
 public class WordleApplication {
 
 	public static void main(String[] args) {
 		
-		InteractiveShell.startGame();
+		InteractiveShell.loadGame();
 //		GameData data = new GameData("frais");
 //        Scanner scanner = new Scanner(System.in);
 //        WordValidator validator = new WordValidator();
