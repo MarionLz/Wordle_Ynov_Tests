@@ -5,7 +5,6 @@ import java.util.Scanner;
 public class GameState {
 
 	private GameData data;
-	private String guess;
 	
 	public GameState() {}
 
@@ -25,12 +24,12 @@ public class GameState {
         while(continueGame) {
         	
     		System.out.println("Enter a 5 letters word (you have " + data.getNbRemainingAttempts() + " remaining attemps) :");
-    		guess = scanner.nextLine();
-    		if (validator.validateWord(guess) && continueGame) {
+    		data.setGuess(scanner.nextLine());
+    		if (validator.validateWord(data.getGuess()) && continueGame) {
         		data.setNbRemainingAttempts(data.getNbRemainingAttempts() - 1);
-        		GameLogic gameLogic = new GameLogic(guess, data.getTarget());
+        		GameLogic gameLogic = new GameLogic(data);
         		
-        		System.out.println(gameLogic.checkGuess(data));
+        		System.out.println(gameLogic.checkGuess());
         		if (data.getCorrectAttempt()) {
         			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attemps !");
         		}

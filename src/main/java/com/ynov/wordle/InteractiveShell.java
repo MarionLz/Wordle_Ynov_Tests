@@ -5,8 +5,8 @@ import java.util.Scanner;
 public class InteractiveShell {
 
     private static Scanner scan = new Scanner(System.in);
-    private static GameData data = new GameData("frais");
-    private static GameState gameState = new GameState(data);
+    private static GameData data;
+    private static GameState gameState;
     
 	public static void loadGame() {
 		
@@ -19,6 +19,9 @@ public class InteractiveShell {
             int option = readSelection();
             switch(option){
                 case 1: {
+                	data = new GameData();
+                	data.setTarget("frais");
+                	gameState = new GameState(data);
                 	gameState.makeGuess();
                 	break;
                 }

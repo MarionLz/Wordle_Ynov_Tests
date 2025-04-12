@@ -3,14 +3,11 @@ package com.ynov.wordle;
 public class GameData {
 	
 	private String target;
-	//private String guess;
+	private String guess;
 	private int nbRemainingAttempts;
 	private boolean correctAttempt;
 	
-	public GameData() {}
-	
-	public GameData(String target) {
-		this.target = target;
+	public GameData() {
 		this.nbRemainingAttempts = 6;
 		this.correctAttempt = true;
 	}
@@ -21,6 +18,14 @@ public class GameData {
 	
 	public void setTarget(String target) {
 		this.target = target;
+	}
+	
+	public String getGuess() {
+		return guess;
+	}
+	
+	public void setGuess(String guess) {
+		this.guess = guess;
 	}
 	
 	public int getNbRemainingAttempts() {

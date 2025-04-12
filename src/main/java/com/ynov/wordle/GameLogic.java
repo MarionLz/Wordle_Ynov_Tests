@@ -2,12 +2,14 @@ package com.ynov.wordle;
 
 public class GameLogic {
 
+	private GameData data;
 	private String guess;
 	private String target;
 
-	public GameLogic(String guess, String target) {
-		this.guess = guess;
-		this.target = target;
+	public GameLogic(GameData data) {
+		this.data = data;
+		this.guess = data.getGuess();
+		this.target = data.getTarget();
 	}
 	
 	private int[] countNbLettersOccurrencesInCorrectWord() {
@@ -20,7 +22,7 @@ public class GameLogic {
 		return letterCount;
 	}
 
-	public String checkGuess(GameData data) {
+	public String checkGuess() {
 		
 		StringBuilder result = new StringBuilder();
 		data.setCorrectAttempt(true);
