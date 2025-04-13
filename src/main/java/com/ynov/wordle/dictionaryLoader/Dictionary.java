@@ -1,4 +1,4 @@
-package com.ynov.wordle;
+package com.ynov.wordle.dictionaryLoader;
 
 import java.util.List;
 

@@ -11,6 +11,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
+import com.ynov.wordle.inputReader.IInputReader;
+import com.ynov.wordle.statistics.GameData;
+import com.ynov.wordle.statistics.IGameStatistics;
+
 @DisplayName("Track the game state: remaining attempts, victory, or defeat")
 public class GameStateTest {
 	

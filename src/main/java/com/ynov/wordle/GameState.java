@@ -1,5 +1,9 @@
 package com.ynov.wordle;
 
+import com.ynov.wordle.inputReader.IInputReader;
+import com.ynov.wordle.inputReader.ScannerInputReader;
+import com.ynov.wordle.statistics.IGameStatistics;
+
 public class GameState {
 
 	private IInputReader inputReader;

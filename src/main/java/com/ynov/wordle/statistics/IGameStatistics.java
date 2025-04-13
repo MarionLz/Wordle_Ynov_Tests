@@ -1,4 +1,4 @@
-package com.ynov.wordle;
+package com.ynov.wordle.statistics;
 
 public interface IGameStatistics {
 
@@ -25,7 +25,4 @@ public interface IGameStatistics {
 		
 		int getTotalGamesPlayed();
 		void setTotalGamesPlayed(int totalGamesPlayed);
-	    
-	    int getAverageAttempts();
-	    void setAverageAttempts(int averageAttempts);
 }

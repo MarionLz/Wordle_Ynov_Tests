@@ -12,6 +12,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import com.ynov.wordle.statistics.GameData;
+
 @DisplayName("Identify whether the guessed letters are correct, misplaced, or absent.")
 public class GameLogicTest {
 

@@ -1,4 +1,4 @@
-package com.ynov.wordle;
+package com.ynov.wordle.inputReader;
 
 import java.util.Scanner;
 

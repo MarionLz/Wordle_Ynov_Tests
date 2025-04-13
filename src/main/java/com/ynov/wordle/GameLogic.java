@@ -1,5 +1,7 @@
 package com.ynov.wordle;
 
+import com.ynov.wordle.statistics.IGameStatistics;
+
 public class GameLogic {
 
 	private IGameStatistics data;

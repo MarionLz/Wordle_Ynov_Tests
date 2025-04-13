@@ -1,69 +1,67 @@
 package com.ynov.wordle;
 
 import java.util.Random;
-import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ynov.wordle.dictionaryLoader.Dictionary;
+import com.ynov.wordle.dictionaryLoader.IDictionaryLoader;
+import com.ynov.wordle.inputReader.IInputReader;
+import com.ynov.wordle.statistics.GameData;
+import com.ynov.wordle.statistics.IGameStatistics;
 
 public class StartGame {
 
-    private static Scanner scan = new Scanner(System.in);
-    private static IGameStatistics data;
-    private static GameState gameState;
+    private IInputReader inputReader;
     
-    private static void loadMenu(){
+    private IGameStatistics data;
+    private GameState gameState;
+    private IDictionaryLoader dictionaryLoader;
+    
+    public StartGame() {}
+    
+    public StartGame(IInputReader inputReader, IGameStatistics data, IDictionaryLoader dictionaryLoader) {
+    	this.inputReader = inputReader;
+    	this.data = data;
+        this.dictionaryLoader = dictionaryLoader;
+    }
+    
+    private void loadMenu(){
         System.out.println("Please select an option. Simply enter the number to choose an action :");
         System.out.println("1 Start a new game");
         System.out.println("2 Display game statistics");
         System.out.println("3 Exit game");
     }
     
-    private static int readSelection() {
+    private int readSelection() {
         try {
-            int input = Integer.parseInt(scan.nextLine());
-            return input;
+            return Integer.parseInt(inputReader.getInput());
         } catch(Exception e){
             System.out.println("Error reading input. Please enter valid number for proceeding further");
             return -1;
         }
     }
     
-    private static String loadDictionary() {
-    	
-    	String randomWord = "";
-    	
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            Dictionary dictionary = objectMapper.readValue(new File("dictionaries/french_dictionary.json"), Dictionary.class);
-
-            Random random = new Random();
-            randomWord = dictionary.words.get(random.nextInt(dictionary.words.size()));
-
-            System.out.println("Le mot à deviner est : " + randomWord);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return randomWord;
+    private void startNewGame() {
+    
+        data.setTarget(dictionaryLoader.loadRandomWord());
+        gameState = new GameState(data);
+    	data = gameState.makeGuess();
     }
     
-    private static void displayGameStatistics(IGameStatistics data) {
+    private void displayGameStatistics() {
     	
-    	int averageAttempts = 0;
-    	
+        int averageAttempts = data.getTotalGamesPlayed() > 0 ?
+                data.getTotalAttempts() / data.getTotalGamesPlayed() : 0;
+        
     	System.out.println("Game Statistics");
     	System.out.println("Nb wins : " + data.getNbWins());
     	System.out.println("Streaks : " + data.getStreaks());
-    	
-    	if (data.getTotalGamesPlayed() > 0) {
-    		averageAttempts = data.getTotalAttempts() / data.getTotalGamesPlayed();
-    	}
     	System.out.println("Average Attempts : " + averageAttempts);
     }
     
-	public static void loadGame() {
+	public void loadGame() {
 		
 		System.out.print("Welcome to this Wordle Game !");
 		
@@ -74,22 +72,13 @@ public class StartGame {
         	loadMenu();
             int option = readSelection();
             switch(option){
-                case 1: {
-                	data.setTarget(loadDictionary());
-                	gameState = new GameState(data);
-                	data = gameState.makeGuess();
-                	break;
-                }
-                case 2: {
-                	displayGameStatistics(data);
-                	break;
-                }
-                case 3: {
-                    System.out.println("Exiting from the game, see you soon !");
+                case 1 -> startNewGame();
+                case 2 -> displayGameStatistics();
+                case 3 -> {
+                	System.out.println("Exiting from the game, see you soon !");
                     continueApp = false;
-                    break;
                 }
-                default: System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
+                default -> System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
             }
         }
 	}

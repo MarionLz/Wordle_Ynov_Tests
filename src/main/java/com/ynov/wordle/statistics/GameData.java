@@ -1,4 +1,4 @@
-package com.ynov.wordle;
+package com.ynov.wordle.statistics;
 
 public class GameData implements IGameStatistics {
 	
@@ -10,14 +10,12 @@ public class GameData implements IGameStatistics {
 	private int streaks;
 	private int totalAttempts;
 	private int totalGamesPlayed;
-	private int averageAttempts;
 	
 	public GameData() {
 		this.nbRemainingAttempts = 6;
 		this.correctAttempt = true;
 		this.nbWins = 0;
 		this.streaks = 0;
-		this.averageAttempts = 0;
 	}
 	
     @Override
@@ -98,15 +96,5 @@ public class GameData implements IGameStatistics {
     @Override
     public void setTotalGamesPlayed(int totalGamesPlayed) {
     	this.totalGamesPlayed = totalGamesPlayed;
-    }
-    
-    @Override
-    public int getAverageAttempts() {
-    	return averageAttempts;
-    }
-    
-    @Override
-    public void setAverageAttempts(int averageAttempts) {
-    	this.averageAttempts = averageAttempts;
     }
 }
