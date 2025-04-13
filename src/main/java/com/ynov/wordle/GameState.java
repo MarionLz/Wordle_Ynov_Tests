@@ -1,36 +1,46 @@
 package com.ynov.wordle;
 
-import java.util.Scanner;
-
 public class GameState {
 
-	private GameData data;
+	private IInputReader inputReader;
+	private WordValidator validator;
+	private IGameStatistics data;
+	private GameLogic gameLogic;
 	
 	public GameState() {}
-
-	public GameState(GameData data) {
+	
+	public GameState(IGameStatistics data) {
 		this.data = data;
+		this.inputReader = new ScannerInputReader();
+		this.validator = new WordValidator();
+		this.gameLogic = new GameLogic();
+	}
+	
+	public GameState(IInputReader inputReader, WordValidator validator, IGameStatistics data, GameLogic gameLogic) {
+		this.inputReader = inputReader;
+		this.validator = validator;
+		this.data = data;
+		this.gameLogic = gameLogic;
 	}
 
 	public void makeGuess() {
-		
-        Scanner scanner = new Scanner(System.in);
-        WordValidator validator = new WordValidator();
         
         System.out.println("Let's play !");
 
         boolean continueGame = true;
+        int nbAttempsInvalidWord = 1;
         
         while(continueGame) {
         	
     		System.out.println("Enter a 5 letters word (you have " + data.getNbRemainingAttempts() + " remaining attemps) :");
-    		data.setGuess(scanner.nextLine());
+    		data.setGuess(inputReader.getInput());
+    		
     		if (validator.validateWord(data.getGuess()) && continueGame) {
         		data.setNbRemainingAttempts(data.getNbRemainingAttempts() - 1);
-        		GameLogic gameLogic = new GameLogic(data);
-        		
+        		gameLogic.setData(data);
         		System.out.println(gameLogic.checkGuess());
         		if (data.getCorrectAttempt()) {
+        			continueGame = false;
         			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attemps !");
         		}
         		else if (data.getNbRemainingAttempts() > 0){
@@ -40,6 +50,14 @@ public class GameState {
         			continueGame = false;
         			System.out.println("Game over, no more attempts left.");
         		}
+    		}
+    		else if (nbAttempsInvalidWord > 0) {
+    			nbAttempsInvalidWord--;
+    			System.out.println("Be careful, if you enter another invalid word, you will loose.");
+    		}
+    		else if (nbAttempsInvalidWord == 0){
+    			continueGame = false;
+    			System.out.println("Game over, you entered 2 invalid words.");
     		}
         }
 	}

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-@DisplayName("Vérifier la validité du mot proposé par le joueur")
+@DisplayName("Verify the validity of the word guessed by the player")
 public class WordValidatorTest {
 
 	private WordValidator wordValidator;
@@ -16,7 +16,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot 'tasse' est valide.")
+	@DisplayName("The word 'tasse' is valid.")
 	public void validateWordTestWithValidWord() {
 		
 		String word = new String("tasse");
@@ -27,7 +27,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot 'chat' n'est pas valide car il contient moins de 5 lettres.")
+	@DisplayName("The word 'chat' is invalid because it has less than 5 letters.")
 	public void validateWordTestWithWordShorterThanFiveChar() {
 		
 		String word = new String("chat");
@@ -38,7 +38,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot 'croissant' n'est pas valide car il contient plus de 5 lettres.")
+	@DisplayName("The word 'croissant' is invalid because it has more than 5 letters.")
 	public void validateWordTestWithWordLongerThanFiveChars() {
 		
 		String word = new String("croissant");
@@ -49,7 +49,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot '15car' n'est pas valide car il contient des chiffres.")
+	@DisplayName("The word '15car' is invalid because it contains digits.")
 	public void validateWordTestWithDigits() {
 		
 		String word = new String("15car");
@@ -60,7 +60,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot 'bon jour' n'est pas valide car il contient un espace.")
+	@DisplayName("The word 'bon jour' is invalid because it contains a space.")
 	public void validateWordTestWithBlankSpaces() {
 		
 		String word = new String("bon jour");
@@ -71,7 +71,7 @@ public class WordValidatorTest {
 	}
 	
 	@Test
-	@DisplayName("Le mot 'bon@jour' n'est pas valide car il contient un caractère spécial.")
+	@DisplayName("The word 'bon@jour' is invalid because it contains a special character.")
 	public void validateWordTestWithSpecialChars() {
 		
 		String word = new String("bon@jour");

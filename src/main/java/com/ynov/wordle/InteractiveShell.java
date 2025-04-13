@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class InteractiveShell {
 
     private static Scanner scan = new Scanner(System.in);
-    private static GameData data;
+    private static IGameStatistics data;
     private static GameState gameState;
     
 	public static void loadGame() {

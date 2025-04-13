@@ -1,20 +1,139 @@
-//package com.ynov.wordle;
-//
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//
-//@DisplayName("Afficher l'état du jeu : le nombre d'essai restant, une victoire ou une défaite.")
-//public class GameStateTest {
-//	
-//	GameState gameState;
-//	
-//	@Test
-//	public void makeGuessTestUpdateRemainingAttemps() {
-//		
-//		
-//		gameState.makeGuess();
-//	}
-//	
-//	@Test
-//	public void 
-//}
+package com.ynov.wordle;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.mockito.*;
+
+@DisplayName("Suivre l'état du jeu : le nombre d'essai restant, une victoire ou une défaite.")
+public class GameStateTest {
+	
+	private IGameStatistics data;
+	
+	@Mock
+	private IInputReader mockInputReader;
+	
+    @Mock
+    private WordValidator mockValidator;
+
+    @Mock
+    private GameLogic mockGameLogic;
+    
+	private GameState gameState;
+	
+	@BeforeEach
+    public void setUp() {
+		data = spy(new GameData());
+        MockitoAnnotations.openMocks(this);
+        gameState = new GameState(mockInputReader, mockValidator, data, mockGameLogic);
+    }
+
+    @Test
+    public void testNbRemainingAttemptsDecrementsOnValidGuess() {
+
+    	when(mockInputReader.getInput()).thenReturn("fruit");
+        when(mockValidator.validateWord("fruit")).thenReturn(true);
+        when(mockGameLogic.checkGuess()).thenReturn("fruit");
+        
+        gameState.makeGuess();
+        
+        assertEquals(5, data.getNbRemainingAttempts());
+    }
+    
+    @Test
+    public void testGameEndsWhenAttemptsRunOut() {
+
+    	data.setNbRemainingAttempts(1);
+    	when(mockInputReader.getInput()).thenReturn("fruit");
+        when(mockValidator.validateWord("fruit")).thenReturn(true);
+        when(mockGameLogic.checkGuess()).thenReturn("fruit");
+        doReturn(false).when(data).getCorrectAttempt();
+
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        gameState.makeGuess();
+
+        verify(data, times(1)).setNbRemainingAttempts(0);
+        
+        String expectedMessage = "Game over, no more attempts left.";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
+    }
+    
+    @Test
+    public void testGameEndsWhenCorrectAnswerIsGuessed() {
+    	
+    	when(mockInputReader.getInput()).thenReturn("fruit");
+        when(mockValidator.validateWord("fruit")).thenReturn(true);
+        when(mockGameLogic.checkGuess()).thenReturn("fruit");
+        
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        gameState.makeGuess();
+        
+        String expectedMessage = "Well done ! You found the answer";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
+    }
+
+    @Test
+    public void testTryAgainIfIncorrectGuessAndAttemptsLeft() {
+
+    	when(mockInputReader.getInput()).thenReturn("fruit");
+        when(mockValidator.validateWord("fruit")).thenReturn(true);
+        when(mockGameLogic.checkGuess()).thenReturn("fruit");
+        doReturn(false).when(data).getCorrectAttempt();
+        
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        gameState.makeGuess();
+        
+        String expectedMessage = "Try again !";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
+    }
+
+    @Test
+    public void testInvalidWordDoesNotDecreaseAttempts() {
+    	
+    	when(mockInputReader.getInput()).thenReturn("chat");
+        when(mockValidator.validateWord("chat")).thenReturn(false);
+
+        gameState.makeGuess();
+
+        assertEquals(6, data.getNbRemainingAttempts());
+    }
+    
+    @Test
+    public void testGameEndsWhenTwoInvalidWordsAreEntered() {
+    	
+    	when(mockInputReader.getInput()).thenReturn("chat");
+        when(mockValidator.validateWord("chat")).thenReturn(false);
+        
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        gameState.makeGuess();
+        
+        String expectedMessage = "Game over, you entered 2 invalid words.";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
+    }
+}

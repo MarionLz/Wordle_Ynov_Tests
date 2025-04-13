@@ -2,14 +2,20 @@ package com.ynov.wordle;
 
 public class GameLogic {
 
-	private GameData data;
+	private IGameStatistics data;
 	private String guess;
 	private String target;
 
-	public GameLogic(GameData data) {
+	public GameLogic() {}
+
+	public GameLogic(IGameStatistics data) {
 		this.data = data;
 		this.guess = data.getGuess();
 		this.target = data.getTarget();
+	}
+	
+	public void setData(IGameStatistics data) {
+		this.data = data;
 	}
 	
 	private int[] countNbLettersOccurrencesInCorrectWord() {
