@@ -16,7 +16,8 @@ public class StartGame {
     private static void loadMenu(){
         System.out.println("Please select an option. Simply enter the number to choose an action :");
         System.out.println("1 Start a new game");
-        System.out.println("2 Exit game");
+        System.out.println("2 Display game statistics");
+        System.out.println("3 Exit game");
     }
     
     private static int readSelection() {
@@ -48,24 +49,42 @@ public class StartGame {
         return randomWord;
     }
     
+    private static void displayGameStatistics(IGameStatistics data) {
+    	
+    	int averageAttempts = 0;
+    	
+    	System.out.println("Game Statistics");
+    	System.out.println("Nb wins : " + data.getNbWins());
+    	System.out.println("Streaks : " + data.getStreaks());
+    	
+    	if (data.getTotalGamesPlayed() > 0) {
+    		averageAttempts = data.getTotalAttempts() / data.getTotalGamesPlayed();
+    	}
+    	System.out.println("Average Attempts : " + averageAttempts);
+    }
+    
 	public static void loadGame() {
 		
 		System.out.print("Welcome to this Wordle Game !");
 		
         boolean continueApp = true;
-        
+    	data = new GameData();
+
         while(continueApp){
         	loadMenu();
             int option = readSelection();
             switch(option){
                 case 1: {
-                	data = new GameData();
                 	data.setTarget(loadDictionary());
                 	gameState = new GameState(data);
-                	gameState.makeGuess();
+                	data = gameState.makeGuess();
                 	break;
                 }
                 case 2: {
+                	displayGameStatistics(data);
+                	break;
+                }
+                case 3: {
                     System.out.println("Exiting from the game, see you soon !");
                     continueApp = false;
                     break;

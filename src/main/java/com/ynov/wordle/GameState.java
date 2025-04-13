@@ -23,12 +23,13 @@ public class GameState {
 		this.gameLogic = gameLogic;
 	}
 
-	public void makeGuess() {
+	public IGameStatistics makeGuess() {
         
         System.out.println("Let's play !");
 
         boolean continueGame = true;
         int nbAttempsInvalidWord = 1;
+        data.setNbRemainingAttempts(6);
         
         while(continueGame) {
         	
@@ -41,6 +42,10 @@ public class GameState {
         		System.out.println(gameLogic.checkGuess());
         		if (data.getCorrectAttempt()) {
         			continueGame = false;
+        			data.setNbWins(data.getNbWins() + 1);
+        			data.setStreaks(data.getStreaks() + 1);
+        			data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
+        			data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
         			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attemps !");
         		}
         		else if (data.getNbRemainingAttempts() > 0){
@@ -48,6 +53,9 @@ public class GameState {
         		}
         		else {
         			continueGame = false;
+        			data.setStreaks(0);
+        			data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
+        			data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
         			System.out.println("Game over, no more attempts left.");
         		}
     		}
@@ -60,5 +68,6 @@ public class GameState {
     			System.out.println("Game over, you entered 2 invalid words.");
     		}
         }
+        return data;
 	}
 }
