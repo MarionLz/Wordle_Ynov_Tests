@@ -1,11 +1,5 @@
 package com.ynov.wordle;
 
-import java.util.Random;
-import java.io.File;
-import java.io.IOException;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ynov.wordle.dictionaryLoader.Dictionary;
 import com.ynov.wordle.dictionaryLoader.IDictionaryLoader;
 import com.ynov.wordle.inputReader.IInputReader;
 import com.ynov.wordle.statistics.GameData;
@@ -14,27 +8,27 @@ import com.ynov.wordle.statistics.IGameStatistics;
 public class StartGame {
 
     private IInputReader inputReader;
-    
     private IGameStatistics data;
     private GameState gameState;
     private IDictionaryLoader dictionaryLoader;
     
     public StartGame() {}
     
-    public StartGame(IInputReader inputReader, IGameStatistics data, IDictionaryLoader dictionaryLoader) {
+    public StartGame(IInputReader inputReader, IGameStatistics data, GameState gameState, IDictionaryLoader dictionaryLoader) {
     	this.inputReader = inputReader;
     	this.data = data;
+    	this.gameState = gameState;
         this.dictionaryLoader = dictionaryLoader;
     }
     
-    private void loadMenu(){
+    protected void loadMenu(){
         System.out.println("Please select an option. Simply enter the number to choose an action :");
         System.out.println("1 Start a new game");
         System.out.println("2 Display game statistics");
         System.out.println("3 Exit game");
     }
     
-    private int readSelection() {
+    protected int readSelection() {
         try {
             return Integer.parseInt(inputReader.getInput());
         } catch(Exception e){
@@ -43,14 +37,14 @@ public class StartGame {
         }
     }
     
-    private void startNewGame() {
+    protected void startNewGame() {
     
         data.setTarget(dictionaryLoader.loadRandomWord());
-        gameState = new GameState(data);
+        gameState.setData(data);
     	data = gameState.makeGuess();
     }
     
-    private void displayGameStatistics() {
+    protected void displayGameStatistics() {
     	
         int averageAttempts = data.getTotalGamesPlayed() > 0 ?
                 data.getTotalAttempts() / data.getTotalGamesPlayed() : 0;

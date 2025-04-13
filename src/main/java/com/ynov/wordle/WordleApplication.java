@@ -14,9 +14,10 @@ public class WordleApplication {
 		
         IInputReader inputReader = new ScannerInputReader();
         IGameStatistics data = new GameData();
+        GameState gameState = new GameState();
         IDictionaryLoader loader = new JsonDictionaryLoader();
         
-		StartGame start = new StartGame(inputReader, data, loader);
+		StartGame start = new StartGame(inputReader, data, gameState, loader);
 		start.loadGame();
 	}
 }

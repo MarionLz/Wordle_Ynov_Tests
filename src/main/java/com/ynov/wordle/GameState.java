@@ -10,11 +10,8 @@ public class GameState {
 	private WordValidator validator;
 	private IGameStatistics data;
 	private GameLogic gameLogic;
-	
-	public GameState() {}
-	
-	public GameState(IGameStatistics data) {
-		this.data = data;
+		
+	public GameState() {
 		this.inputReader = new ScannerInputReader();
 		this.validator = new WordValidator();
 		this.gameLogic = new GameLogic();
@@ -25,6 +22,10 @@ public class GameState {
 		this.validator = validator;
 		this.data = data;
 		this.gameLogic = gameLogic;
+	}
+	
+	public void setData(IGameStatistics data) {
+		this.data = data;
 	}
 	
 	private IGameStatistics updateStatsWhenWin(IGameStatistics data) {
