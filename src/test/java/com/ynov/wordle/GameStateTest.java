@@ -11,7 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 
-@DisplayName("Suivre l'état du jeu : le nombre d'essai restant, une victoire ou une défaite.")
+@DisplayName("Track the game state: remaining attempts, victory, or defeat")
 public class GameStateTest {
 	
 	private IGameStatistics data;
@@ -35,6 +35,7 @@ public class GameStateTest {
     }
 
     @Test
+    @DisplayName("Should decrement remaining attempts on valid guess")
     public void testNbRemainingAttemptsDecrementsOnValidGuess() {
 
     	when(mockInputReader.getInput()).thenReturn("fruit");
@@ -47,6 +48,7 @@ public class GameStateTest {
     }
     
     @Test
+    @DisplayName("Should end game when no attempts are left")
     public void testGameEndsWhenAttemptsRunOut() {
 
     	data.setNbRemainingAttempts(1);
@@ -62,6 +64,8 @@ public class GameStateTest {
         gameState.makeGuess();
 
         verify(data, times(1)).setNbRemainingAttempts(0);
+        verify(data, times(1)).setStreaks(0);
+        verify(data, times(1)).setTotalGamesPlayed(1);
         
         String expectedMessage = "Game over, no more attempts left.";
         String actualOutput = outContent.toString().trim();
@@ -70,6 +74,7 @@ public class GameStateTest {
     }
     
     @Test
+    @DisplayName("Should end game with success message on correct guess")
     public void testGameEndsWhenCorrectAnswerIsGuessed() {
     	
     	when(mockInputReader.getInput()).thenReturn("fruit");
@@ -82,6 +87,10 @@ public class GameStateTest {
         
         gameState.makeGuess();
         
+        verify(data, times(1)).setNbWins(1);
+        verify(data, times(1)).setStreaks(1);
+        verify(data, times(1)).setTotalGamesPlayed(1);
+        
         String expectedMessage = "Well done ! You found the answer";
         String actualOutput = outContent.toString().trim();
 
@@ -89,6 +98,7 @@ public class GameStateTest {
     }
 
     @Test
+    @DisplayName("Should prompt to try again on incorrect guess with remaining attempts")
     public void testTryAgainIfIncorrectGuessAndAttemptsLeft() {
 
     	when(mockInputReader.getInput()).thenReturn("fruit");
@@ -109,6 +119,7 @@ public class GameStateTest {
     }
 
     @Test
+    @DisplayName("Should not decrease attempts on invalid word")
     public void testInvalidWordDoesNotDecreaseAttempts() {
     	
     	when(mockInputReader.getInput()).thenReturn("chat");
@@ -120,6 +131,7 @@ public class GameStateTest {
     }
     
     @Test
+    @DisplayName("Should end game after two invalid word entries")
     public void testGameEndsWhenTwoInvalidWordsAreEntered() {
     	
     	when(mockInputReader.getInput()).thenReturn("chat");
@@ -130,6 +142,9 @@ public class GameStateTest {
         System.setOut(new PrintStream(outContent));
         
         gameState.makeGuess();
+        
+        verify(data, times(1)).setStreaks(0);
+        verify(data, times(1)).setTotalGamesPlayed(1);
         
         String expectedMessage = "Game over, you entered 2 invalid words.";
         String actualOutput = outContent.toString().trim();

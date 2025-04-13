@@ -22,6 +22,23 @@ public class GameState {
 		this.data = data;
 		this.gameLogic = gameLogic;
 	}
+	
+	private IGameStatistics updateStatsWhenWin(IGameStatistics data) {
+		
+		data.setNbWins(data.getNbWins() + 1);
+		data.setStreaks(data.getStreaks() + 1);
+		data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
+		data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
+		return data;
+	}
+	
+	private IGameStatistics updateStatsWhenLoose(IGameStatistics data) {
+		
+		data.setStreaks(0);
+		data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
+		data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
+		return data;
+	}
 
 	public IGameStatistics makeGuess() {
         
@@ -42,10 +59,7 @@ public class GameState {
         		System.out.println(gameLogic.checkGuess());
         		if (data.getCorrectAttempt()) {
         			continueGame = false;
-        			data.setNbWins(data.getNbWins() + 1);
-        			data.setStreaks(data.getStreaks() + 1);
-        			data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
-        			data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
+        			data = updateStatsWhenWin(data);
         			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attemps !");
         		}
         		else if (data.getNbRemainingAttempts() > 0){
@@ -53,9 +67,7 @@ public class GameState {
         		}
         		else {
         			continueGame = false;
-        			data.setStreaks(0);
-        			data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
-        			data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
+        			data = updateStatsWhenLoose(data);
         			System.out.println("Game over, no more attempts left.");
         		}
     		}
@@ -65,6 +77,7 @@ public class GameState {
     		}
     		else if (nbAttempsInvalidWord == 0){
     			continueGame = false;
+    			data = updateStatsWhenLoose(data);
     			System.out.println("Game over, you entered 2 invalid words.");
     		}
         }
