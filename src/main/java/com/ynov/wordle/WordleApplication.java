@@ -4,7 +4,7 @@ public class WordleApplication {
 
 	public static void main(String[] args) {
 		
-		InteractiveShell.loadGame();
+		StartGame.loadGame();
 //		GameData data = new GameData("frais");
 //        Scanner scanner = new Scanner(System.in);
 //        WordValidator validator = new WordValidator();

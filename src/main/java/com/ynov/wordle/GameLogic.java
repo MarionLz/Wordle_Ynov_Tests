@@ -16,6 +16,8 @@ public class GameLogic {
 	
 	public void setData(IGameStatistics data) {
 		this.data = data;
+		this.guess = data.getGuess();
+		this.target = data.getTarget();
 	}
 	
 	private int[] countNbLettersOccurrencesInCorrectWord() {
