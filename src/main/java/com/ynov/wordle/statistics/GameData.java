@@ -1,5 +1,8 @@
 package com.ynov.wordle.statistics;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GameData implements IGameStatistics {
 	
 	private String target;
@@ -10,12 +13,13 @@ public class GameData implements IGameStatistics {
 	private int streaks;
 	private int totalAttempts;
 	private int totalGamesPlayed;
+	private int score;
+    private List<Integer> scoreHistory;
 	
 	public GameData() {
 		this.nbRemainingAttempts = 6;
 		this.correctAttempt = true;
-		this.nbWins = 0;
-		this.streaks = 0;
+		this.scoreHistory = new ArrayList<>();
 	}
 	
     @Override
@@ -96,5 +100,30 @@ public class GameData implements IGameStatistics {
     @Override
     public void setTotalGamesPlayed(int totalGamesPlayed) {
     	this.totalGamesPlayed = totalGamesPlayed;
+    }
+    
+    @Override
+	public int getScore() {
+    	return score;
+    }
+    
+    @Override
+	public void setScore(int score) {
+    	this.score = score;
+    }
+    
+    @Override
+	public void addScore(int points) {
+    	this.score += points;
+    }
+
+    @Override
+    public List<Integer> getScoreHistory() {
+        return scoreHistory;
+    }
+    
+    @Override
+    public void addScoreToHistory(int score) {
+        scoreHistory.add(score);
     }
 }

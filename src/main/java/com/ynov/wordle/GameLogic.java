@@ -36,6 +36,7 @@ public class GameLogic {
 		
 		StringBuilder result = new StringBuilder();
 		data.setCorrectAttempt(true);
+		int roundScore = 0;
 		
 		int[] letterCount = countNbLettersOccurrencesInCorrectWord();
 		
@@ -64,9 +65,12 @@ public class GameLogic {
                 letterStates[i] = LetterState.GRAY;
             }
             
+            roundScore += letterStates[i].getScore();
+            
             result.append(letterStates[i].getAnsiCode()).append(guessedLetter).append(LetterState.RESET.getAnsiCode());
         }
         
+        data.addScore(roundScore);
 		return result.toString();
 	}
 }

@@ -42,9 +42,44 @@ public class GameState {
 		data.setStreaks(0);
 		data.setTotalAttempts(data.getTotalAttempts() + 6 - data.getNbRemainingAttempts());
 		data.setTotalGamesPlayed(data.getTotalGamesPlayed() + 1);
+        data.setScore(0);
 		return data;
 	}
 
+	private int calculateFinalScore() {
+		
+        if (!data.getCorrectAttempt()) return 0;
+
+        int baseScore = 50 + data.getNbRemainingAttempts() * 10;
+
+        int bonus = 0;
+        boolean[] matched = new boolean[5];
+
+        for (int i = 0; i < 5; i++) {
+            char guessedChar = data.getGuess().charAt(i);
+            if (guessedChar == data.getTarget().charAt(i)) {
+                bonus += 3;
+                matched[i] = true;
+            }
+        }
+
+        // Letters misplaced but present in the word
+        for (int i = 0; i < 5; i++) {
+            char guessedChar = data.getGuess().charAt(i);
+            if (guessedChar != data.getTarget().charAt(i)) {
+                for (int j = 0; j < 5; j++) {
+                    if (!matched[j] && guessedChar == data.getTarget().charAt(j)) {
+                        bonus += 1;
+                        matched[j] = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return baseScore + bonus;
+    }
+	
 	public IGameStatistics makeGuess() {
         
         System.out.println("Let's play !");
@@ -64,8 +99,8 @@ public class GameState {
         		System.out.println(gameLogic.checkGuess());
         		if (data.getCorrectAttempt()) {
         			continueGame = false;
+        			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attempts !");
         			data = updateStatsWhenWin(data);
-        			System.out.println("Well done ! You found the answer in : " + (6 - data.getNbRemainingAttempts()) + " attemps !");
         		}
         		else if (data.getNbRemainingAttempts() > 0){
         			System.out.println("Try again ! You have : " + data.getNbRemainingAttempts() + " attemps left.");
@@ -86,6 +121,12 @@ public class GameState {
     			System.out.println("Game over, you entered 2 invalid words.");
     		}
         }
+        
+        int finalScore = calculateFinalScore();
+        data.setScore(finalScore);
+		System.out.println("Score = " + data.getScore() + " points");
+        data.addScoreToHistory(finalScore);
+        data.setScore(0);
         return data;
 	}
 }

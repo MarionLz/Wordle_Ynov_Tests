@@ -1,5 +1,7 @@
 package com.ynov.wordle.statistics;
 
+import java.util.List;
+
 public interface IGameStatistics {
 
 	    String getGuess();
@@ -25,4 +27,11 @@ public interface IGameStatistics {
 		
 		int getTotalGamesPlayed();
 		void setTotalGamesPlayed(int totalGamesPlayed);
+		
+		public int getScore();
+		public void setScore(int score);
+		public void addScore(int points);
+		
+	    public List<Integer> getScoreHistory();
+	    public void addScoreToHistory(int score);
 }

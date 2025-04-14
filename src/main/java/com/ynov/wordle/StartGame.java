@@ -1,5 +1,7 @@
 package com.ynov.wordle;
 
+import java.util.List;
+
 import com.ynov.wordle.dictionaryLoader.IDictionaryLoader;
 import com.ynov.wordle.inputReader.IInputReader;
 import com.ynov.wordle.statistics.GameData;
@@ -22,7 +24,7 @@ public class StartGame {
     }
     
     protected void loadMenu(){
-        System.out.println("Please select an option. Simply enter the number to choose an action :");
+        System.out.println("\nPlease select an option. Simply enter the number to choose an action :");
         System.out.println("1 Start a new game");
         System.out.println("2 Display game statistics");
         System.out.println("3 Exit game");
@@ -43,7 +45,7 @@ public class StartGame {
         gameState.setData(data);
     	data = gameState.makeGuess();
     }
-    
+        
     protected void displayGameStatistics() {
     	
         int averageAttempts = data.getTotalGamesPlayed() > 0 ?
@@ -53,6 +55,24 @@ public class StartGame {
     	System.out.println("Nb wins : " + data.getNbWins());
     	System.out.println("Streaks : " + data.getStreaks());
     	System.out.println("Average Attempts : " + averageAttempts);
+    	
+    	//display score statistics
+    	
+    	List<Integer> scores = data.getScoreHistory();
+        
+        if (scores.isEmpty()) {
+            System.out.println("No scores recorded yet.");
+            return;
+        }
+
+        System.out.println("Score history:");
+        for (int i = 0; i < scores.size(); i++) {
+            System.out.println("Game " + (i + 1) + ": " + scores.get(i) + " points");
+        }
+
+        int total = scores.stream().mapToInt(Integer::intValue).sum();
+        double average = total / (double) scores.size();
+        System.out.println("Average score: " + String.format("%.2f", average));
     }
     
 	public void loadGame() {

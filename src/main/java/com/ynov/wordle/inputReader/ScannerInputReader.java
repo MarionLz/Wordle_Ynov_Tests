@@ -12,9 +12,6 @@ public class ScannerInputReader implements IInputReader {
     	try {
             scanner.hasNextLine();
                 return scanner.nextLine();
-//            } else {
-//                throw new NoSuchElementException("No input provided.");
-//            }
         } catch (NoSuchElementException e) {
             System.out.println("Error: No input found. Exiting game...");
             System.exit(0);
