@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.ynov.wordle.dictionaryLoader.IDictionaryLoader;
 import com.ynov.wordle.inputReader.IInputReader;
-import com.ynov.wordle.statistics.GameData;
 import com.ynov.wordle.statistics.IGameStatistics;
 
 public class StartGame {
@@ -80,7 +79,6 @@ public class StartGame {
 		System.out.print("Welcome to this Wordle Game !");
 		
         boolean continueApp = true;
-    	data = new GameData();
 
         while(continueApp){
         	loadMenu();

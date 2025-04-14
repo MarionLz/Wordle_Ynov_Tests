@@ -11,6 +11,11 @@ import org.mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.Arrays;
+import java.util.Collections;
+
 public class StartGameTest {
 
     @Mock
@@ -83,6 +88,50 @@ public class StartGameTest {
     }
     
     @Test
+    public void testDisplayGameStatistics_EmptyScore() throws Exception {
+    	
+        when(gameStatistics.getNbWins()).thenReturn(5);
+        when(gameStatistics.getStreaks()).thenReturn(3);
+        when(gameStatistics.getTotalGamesPlayed()).thenReturn(2);
+        when(gameStatistics.getTotalAttempts()).thenReturn(6);
+        when(gameStatistics.getScoreHistory()).thenReturn(Collections.emptyList());
+
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        startGame.displayGameStatistics();
+
+        String expectedMessage = "No scores recorded yet.";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
+    }
+    
+    @Test
+    public void testDisplayGameStatistics_WithScores() throws Exception {
+
+    	when(gameStatistics.getNbWins()).thenReturn(5);
+        when(gameStatistics.getStreaks()).thenReturn(3);
+        when(gameStatistics.getTotalGamesPlayed()).thenReturn(3);
+        when(gameStatistics.getTotalAttempts()).thenReturn(9);
+        when(gameStatistics.getScoreHistory()).thenReturn(Arrays.asList(10, 20, 30));
+
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+
+        startGame.displayGameStatistics();
+
+        String actualOutput = outContent.toString().trim();
+
+        assertTrue(actualOutput.contains("Score history"));
+        assertTrue(actualOutput.contains("Game 1: 10 points"));
+        assertTrue(actualOutput.contains("Game 2: 20 points"));
+        assertTrue(actualOutput.contains("Game 3: 30 points"));
+        assertTrue(actualOutput.contains("Average score"));
+    }
+    
+    @Test
     public void testLoadGame_menuOption2And3() {
 
     	when(inputReader.getInput())
@@ -116,6 +165,23 @@ public class StartGameTest {
         verify(startGame).startNewGame();
         verify(startGame, times(2)).loadMenu();
         verify(startGame, never()).displayGameStatistics();
+    }
+    
+    @Test
+    public void testLoadGame_WrongMenuOption() {
+    	
+        when(inputReader.getInput()).thenReturn("4").thenReturn("3");
+
+        //redirect the standard output
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
+        
+        startGame.loadGame();
+
+        String expectedMessage = "Unsupported option. Please enter a number corresponding to the provided menu";
+        String actualOutput = outContent.toString().trim();
+
+        assert actualOutput.contains(expectedMessage);
     }
 }
 

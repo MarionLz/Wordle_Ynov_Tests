@@ -2,6 +2,8 @@ package com.ynov.wordle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class GameLogicTest {
 	@BeforeEach
 	void setUp() {
 		
-		data = new GameData();
+		data = spy(new GameData());
 	}
 	
 	@Test
@@ -123,4 +125,18 @@ public class GameLogicTest {
 	    assertEquals(yellowE, coloredEs.get(0), "The first 'e' should be yellow (misplaced).");
 	    assertEquals(grayE, coloredEs.get(1), "The second 'e' should be gray (absent).");
 	}
+	
+    @Test
+    void testSetData() {
+    	
+		gameLogic = new GameLogic(data);
+
+        when(data.getGuess()).thenReturn("pomme");
+        when(data.getTarget()).thenReturn("cerise");
+
+        gameLogic.setData(data);
+
+        assertEquals("pomme", data.getGuess());
+        assertEquals("cerise", data.getTarget());
+    }
 }
