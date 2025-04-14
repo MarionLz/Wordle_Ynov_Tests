@@ -46,11 +46,13 @@ public class GameState {
 		return data;
 	}
 
-	private int calculateFinalScore() {
+	protected int calculateFinalScore() {
 		
-        if (!data.getCorrectAttempt()) return 0;
-
         int baseScore = 50 + data.getNbRemainingAttempts() * 10;
+        
+        if (!data.getCorrectAttempt()) {
+            baseScore = 10;
+        }
 
         int bonus = 0;
         boolean[] matched = new boolean[5];
