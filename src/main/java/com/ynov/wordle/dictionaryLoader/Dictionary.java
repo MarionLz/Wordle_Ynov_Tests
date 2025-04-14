@@ -6,6 +6,8 @@ public class Dictionary {
 	
     public List<String> words;
     
+    public Dictionary() {}
+    
     public Dictionary (List<String> words) {
     	
     	this.words = words;
