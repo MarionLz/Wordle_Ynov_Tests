@@ -1,5 +1,6 @@
 package com.ynov.wordle.inputReader;
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ScannerInputReader implements IInputReader {
@@ -8,6 +9,16 @@ public class ScannerInputReader implements IInputReader {
 
     @Override
     public String getInput() {
-        return scanner.nextLine();
+    	try {
+            scanner.hasNextLine();
+                return scanner.nextLine();
+//            } else {
+//                throw new NoSuchElementException("No input provided.");
+//            }
+        } catch (NoSuchElementException e) {
+            System.out.println("Error: No input found. Exiting game...");
+            System.exit(0);
+            return null;
+        }
     }
 }

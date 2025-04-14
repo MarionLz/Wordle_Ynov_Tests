@@ -69,7 +69,7 @@ public class StartGame {
                 case 1 -> startNewGame();
                 case 2 -> displayGameStatistics();
                 case 3 -> {
-                	System.out.println("Exiting from the game, see you soon !");
+                	System.out.println("Exiting game, see you soon !");
                     continueApp = false;
                 }
                 default -> System.out.println("Unsupported option. Please enter a number corresponding to the provided menu");
