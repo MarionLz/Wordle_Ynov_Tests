@@ -41,6 +41,7 @@ public class StartGame {
     protected void startNewGame() {
     
         data.setTarget(dictionaryLoader.loadRandomWord());
+        //System.out.println("Target = " + data.getTarget());
         gameState.setData(data);
     	data = gameState.makeGuess();
     }
